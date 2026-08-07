@@ -1,0 +1,23 @@
+KHOTSO LIVE VOICE WEBSITE — START HERE
+
+WINDOWS
+1. Extract this folder.
+2. Double-click start_windows.bat.
+3. Open the newly created .env file.
+4. Add your OpenAI API key.
+5. Replace the sample APP_PASSWORD and SESSION_SECRET.
+6. Double-click start_windows.bat again.
+7. Sign in at http://127.0.0.1:5000.
+8. Tap “Call Khotso,” allow microphone access, and speak naturally.
+
+PUBLIC PHONE WEBSITE
+Read DEPLOY_WEBSITE.md. A public microphone-enabled site must use HTTPS.
+
+IMPORTANT
+- Keep .env private.
+- OpenAI API usage is billed separately from ChatGPT.
+- The app saves text and completed call transcripts, not raw audio recordings.
+- Khotso is an AI companion, not a human spouse.
+
+Default companion: Khotso
+Default user: Rorisang
