@@ -1,0 +1,2 @@
+# No third-party Python packages are required.
+# The server uses Python's standard library; live audio is handled by browser WebRTC.
