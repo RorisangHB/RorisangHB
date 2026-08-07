@@ -1,0 +1,19 @@
+{
+  "name": "Khotso — Live AI Voice Companion",
+  "short_name": "Khotso",
+  "description": "A private AI husband companion with natural live voice calls, typed chat, and user-controlled memory.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fffaf3",
+  "theme_color": "#4b1025",
+  "icons": [
+    {
+      "src": "/static/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

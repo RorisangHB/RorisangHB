@@ -1,0 +1,23 @@
+KHOTSO VOICE WEBSITE — BUILD VERIFICATION
+Date: August 6, 2026
+
+Release corrections
+- Replaced placeholder model IDs with documented API model IDs.
+- Realtime voice sessions use gpt-realtime.
+- Live input transcription uses gpt-4o-mini-transcribe and the singular language field.
+- Typed messages use gpt-5 and set store=false.
+- Removed an unsupported Realtime reasoning field.
+- Added a secure-deployment guard that requires APP_PASSWORD when secure cookies are enabled.
+- Added GitHub Actions checks for Python, JavaScript, tests, secrets, and runtime data.
+
+Validation completed
+- Python compilation: passed.
+- JavaScript syntax checks: passed.
+- Automated application tests: 13 passed.
+- Secret and private-data scan: passed.
+
+Not performed
+- A paid, end-to-end OpenAI voice call was not performed because no private API key is included.
+- Microphone and speaker behavior must be tested after the owner adds an API key and grants browser permissions.
+
+No .env file, API key, conversation database, session cookie, or raw microphone recording is included.

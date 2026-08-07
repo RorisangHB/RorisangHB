@@ -1,0 +1,53 @@
+name: Khotso Voice Website CI
+
+on:
+  pull_request:
+    paths:
+      - "khotso-voice-website/**"
+      - ".github/workflows/khotso-voice-ci.yml"
+      - "render.yaml"
+  push:
+    branches: [main]
+    paths:
+      - "khotso-voice-website/**"
+      - ".github/workflows/khotso-voice-ci.yml"
+      - "render.yaml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: khotso-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: khotso-voice-website
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Compile Python
+        run: python -m py_compile app.py companion_prompt.py
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+      - name: Check browser JavaScript
+        run: |
+          node --check static/app.js
+          node --check static/service-worker.js
+      - name: Guard against committed runtime secrets and data
+        shell: bash
+        run: |
+          test ! -f .env
+          test ! -f data/khotso.db
+          if grep -RIE --exclude='.env.example' --exclude-dir='.git' 'sk-[A-Za-z0-9_-]{20,}' .; then
+            echo 'A value resembling an OpenAI API key was found.' >&2
+            exit 1
+          fi

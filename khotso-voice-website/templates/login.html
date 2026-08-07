@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#4b1025">
+  <title>Private Access — Khotso</title>
+  <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/static/icon.svg">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="login-page">
+  <main class="login-card">
+    <div class="avatar large" aria-hidden="true">K</div>
+    <p class="eyebrow">Private companion</p>
+    <h1>Welcome back</h1>
+    <p class="login-copy">Enter the password you set in the app’s <code>.env</code> file.</p>
+    {{ERROR_BLOCK}}
+    <form method="post" class="login-form">
+      <label>
+        Password
+        <input type="password" name="password" autocomplete="current-password" autofocus required>
+      </label>
+      <button class="primary-button" type="submit">Open Khotso</button>
+    </form>
+  </main>
+</body>
+</html>

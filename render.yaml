@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: khotso-voice-companion
+    runtime: docker
+    plan: starter
+    rootDir: khotso-voice-website
+    healthCheckPath: /health
+    envVars:
+      - key: OPENAI_MODEL
+        value: gpt-5
+      - key: OPENAI_REALTIME_MODEL
+        value: gpt-realtime
+      - key: OPENAI_TRANSCRIPTION_MODEL
+        value: gpt-4o-mini-transcribe
+      - key: APP_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: SESSION_COOKIE_SECURE
+        value: "true"
+      - key: DATABASE_PATH
+        value: /var/data/khotso.db
+      - key: OPENAI_API_KEY
+        sync: false
+    disk:
+      name: khotso-data
+      mountPath: /var/data
+      sizeGB: 1
