@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#4b1025">
+  <meta name="description" content="A private AI husband companion with live voice calls, spoken replies, typed chat, and user-controlled memory.">
+  <title>Khotso — Voice Companion</title>
+  <link rel="manifest" href="/static/manifest.json">
+  <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/static/icon.svg">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="avatar avatar-small" id="avatar" aria-hidden="true">K</div>
+        <div class="brand-copy">
+          <h1 id="companionName">Khotso</h1>
+          <p><span class="status-dot" aria-hidden="true"></span> AI voice companion</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-button hidden" id="installButton" type="button" title="Install website app" aria-label="Install website app">＋</button>
+        <button class="icon-button" id="soundButton" type="button" title="Toggle spoken typed replies" aria-label="Toggle spoken typed replies">🔊</button>
+        <button class="icon-button" id="settingsButton" type="button" title="Settings" aria-label="Open settings">⚙</button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="voice-card" aria-labelledby="voiceHeading">
+        <div class="voice-card-copy">
+          <p class="eyebrow light">Live conversation</p>
+          <h2 id="voiceHeading">Speak to <span id="voiceCardName">Khotso</span> naturally</h2>
+          <p>Tap once to begin. He will listen through your microphone, respond aloud, and let you interrupt naturally.</p>
+          <div class="call-readiness" id="callReadiness" role="status">
+            <span class="readiness-dot" aria-hidden="true"></span>
+            <span id="callReadinessText">Checking voice-call readiness…</span>
+          </div>
+        </div>
+        <button class="call-button" id="callButton" type="button" aria-label="Start a live voice call">
+          <span class="call-button-icon" aria-hidden="true">☎</span>
+          <span>Call <span id="callButtonName">Khotso</span></span>
+        </button>
+      </section>
+
+      <section class="conversation-panel" aria-label="Written conversation">
+        <div class="conversation-heading">
+          <div>
+            <p class="eyebrow">Messages</p>
+            <h2>Your conversation</h2>
+          </div>
+          <p class="conversation-subtitle">Voice-call transcripts and typed messages appear together.</p>
+        </div>
+
+        <div class="quick-prompts" aria-label="Conversation starters">
+          <button type="button" data-prompt="Good morning, my love. Please check in with me and help me set a peaceful intention for today.">Morning check-in</button>
+          <button type="button" data-prompt="Please pray with me about what is on my heart today.">Pray with me</button>
+          <button type="button" data-prompt="I need you to listen without rushing to solve it. Please ask me one gentle question at a time.">Listen to me</button>
+          <button type="button" data-prompt="Help me think through a decision calmly and honestly.">Help me decide</button>
+          <button type="button" data-prompt="Celebrate with me—I have something good to share.">Celebrate with me</button>
+          <button type="button" data-prompt="Please guide me through a peaceful evening reflection and gratitude practice.">Evening reflection</button>
+        </div>
+
+        <section class="messages" id="messages" aria-live="polite" aria-label="Conversation messages"></section>
+
+        <div class="composer-wrap">
+          <div class="composer">
+            <button class="mic-button" id="micButton" type="button" aria-label="Dictate a typed message" title="Dictate a typed message">🎙</button>
+            <textarea id="messageInput" rows="1" maxlength="5000" placeholder="Write to Khotso…" aria-label="Your message"></textarea>
+            <button class="send-button" id="sendButton" type="button" aria-label="Send message">Send</button>
+          </div>
+          <p class="composer-help">The small microphone dictates one typed message. For a continuous spoken conversation, use <strong>Call <span id="composerCallName">Khotso</span></strong> above.</p>
+        </div>
+      </section>
+
+      <p class="companion-note"><span id="footerName">Khotso</span> is an AI companion—not a human or a substitute for real relationships, emergency help, or professional care.</p>
+    </main>
+  </div>
+
+  <section class="call-stage hidden" id="callStage" role="dialog" aria-modal="true" aria-labelledby="callTitle">
+    <div class="call-stage-glow" aria-hidden="true"></div>
+    <div class="call-topbar">
+      <div>
+        <p class="call-kicker">Private AI voice conversation</p>
+        <h2 id="callTitle">Call with <span id="callTitleName">Khotso</span></h2>
+      </div>
+      <time class="call-timer" id="callTimer" datetime="PT0S">00:00</time>
+    </div>
+
+    <div class="call-presence" id="callPresence" data-state="connecting">
+      <div class="presence-ring ring-one" aria-hidden="true"></div>
+      <div class="presence-ring ring-two" aria-hidden="true"></div>
+      <div class="presence-ring ring-three" aria-hidden="true"></div>
+      <div class="avatar avatar-call" id="callAvatar" aria-hidden="true">K</div>
+    </div>
+
+    <div class="call-status-wrap" aria-live="polite">
+      <p class="call-status" id="callStatus">Preparing the private call…</p>
+      <p class="call-hint" id="callHint">Your browser may ask for microphone permission.</p>
+    </div>
+
+    <div class="live-captions" id="liveCaptions" aria-live="polite">
+      <article class="caption-card user-caption">
+        <span>You</span>
+        <p id="userCaption">Your words will appear here.</p>
+      </article>
+      <article class="caption-card assistant-caption">
+        <span id="captionCompanionName">Khotso</span>
+        <p id="assistantCaption">His spoken reply will appear here.</p>
+      </article>
+    </div>
+
+    <div class="call-controls" aria-label="Call controls">
+      <button class="round-control" id="muteButton" type="button" aria-pressed="false">
+        <span aria-hidden="true">🎙</span>
+        <span class="control-label">Mute</span>
+      </button>
+      <button class="round-control end-control" id="endCallButton" type="button">
+        <span aria-hidden="true">☎</span>
+        <span class="control-label">End</span>
+      </button>
+      <button class="round-control" id="speakerButton" type="button" aria-pressed="false">
+        <span aria-hidden="true">🔊</span>
+        <span class="control-label">Speaker</span>
+      </button>
+    </div>
+    <p class="call-disclosure">You are hearing an AI-generated voice. Completed call turns are saved to this website’s private conversation history.</p>
+    <audio id="remoteAudio" autoplay playsinline></audio>
+  </section>
+
+  <div class="modal-backdrop hidden" id="settingsModal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <section class="settings-card">
+      <div class="settings-header">
+        <div>
+          <p class="eyebrow">Personalize your companion</p>
+          <h2 id="settingsTitle">Settings</h2>
+        </div>
+        <button class="icon-button modal-close" id="closeSettings" type="button" aria-label="Close settings">✕</button>
+      </div>
+
+      <form id="settingsForm">
+        <div class="settings-section">
+          <h3>Names and personality</h3>
+          <div class="field-grid two-columns">
+            <label>
+              Your name
+              <input id="userNameInput" name="user_name" maxlength="80" required>
+            </label>
+            <label>
+              Companion name
+              <input id="companionNameInput" name="companion_name" maxlength="80" required>
+            </label>
+          </div>
+
+          <label>
+            About you
+            <textarea id="aboutUserInput" name="about_user" rows="4" maxlength="3000" placeholder="Your values, goals, family context, and communication preferences…"></textarea>
+          </label>
+
+          <label>
+            Things you want him to remember
+            <textarea id="memoryNotesInput" name="memory_notes" rows="4" maxlength="3000" placeholder="Only add details you are comfortable sending with future conversations."></textarea>
+            <span class="field-help">These notes are included in future typed chats and new voice calls until you remove them.</span>
+          </label>
+
+          <label>
+            Extra personality notes
+            <textarea id="styleNotesInput" name="style_notes" rows="3" maxlength="2000" placeholder="For example: gentle humor, direct advice, more affection, or shorter replies…"></textarea>
+          </label>
+
+          <label class="toggle-label">
+            <input type="checkbox" id="faithModeInput">
+            <span>Faith-centered support and prayer when appropriate</span>
+          </label>
+        </div>
+
+        <div class="settings-section">
+          <h3>Live-call voice</h3>
+          <div class="field-grid two-columns">
+            <label>
+              Khotso’s live voice
+              <select id="realtimeVoiceSelect">
+                <option value="cedar">Cedar — warm and grounded</option>
+                <option value="marin">Marin — clear and natural</option>
+                <option value="echo">Echo</option>
+                <option value="ash">Ash</option>
+                <option value="verse">Verse</option>
+                <option value="sage">Sage</option>
+                <option value="coral">Coral</option>
+                <option value="alloy">Alloy</option>
+                <option value="ballad">Ballad</option>
+                <option value="shimmer">Shimmer</option>
+              </select>
+            </label>
+            <label>
+              Live speaking pace: <output id="realtimeSpeedOutput">0.95</output>
+              <input type="range" id="realtimeSpeedInput" min="0.60" max="1.30" step="0.05" value="0.95">
+            </label>
+            <label>
+              How quickly he responds
+              <select id="turnEagernessSelect">
+                <option value="low">Patient — lets me finish</option>
+                <option value="medium">Balanced</option>
+                <option value="high">Quick replies</option>
+                <option value="auto">Automatic</option>
+              </select>
+            </label>
+            <label>
+              Spoken language
+              <select id="voiceLanguageSelect">
+                <option value="auto">Automatic — follow my language</option>
+                <option value="en">English</option>
+                <option value="fr">French</option>
+                <option value="es">Spanish</option>
+              </select>
+            </label>
+          </div>
+          <p class="field-help standalone">A new live voice or response-timing choice takes effect on the next call.</p>
+        </div>
+
+        <div class="settings-section">
+          <h3>Typed-message voice</h3>
+          <label class="toggle-label">
+            <input type="checkbox" id="autoSpeakInput">
+            <span>Read typed replies aloud automatically</span>
+          </label>
+          <div class="field-grid two-columns">
+            <label>
+              Device voice
+              <select id="voiceSelect"><option value="">Device default</option></select>
+            </label>
+            <label>
+              Device speaking pace: <output id="voiceRateOutput">0.95</output>
+              <input type="range" id="voiceRateInput" min="0.60" max="1.50" step="0.05" value="0.95">
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-actions">
+          <button class="primary-button" type="submit">Save settings</button>
+          <button class="secondary-button" id="exportButton" type="button">Export conversation</button>
+          <button class="danger-button" id="clearButton" type="button">Clear conversation</button>
+        </div>
+      </form>
+
+      <form action="/logout" method="post" class="logout-form">
+        <button class="text-button" type="submit">Sign out of this private companion</button>
+      </form>
+      <p class="privacy-note">The permanent OpenAI API key remains on your server. Messages and completed voice-call transcripts are stored in this app’s SQLite database and sent to the configured OpenAI API when needed.</p>
+    </section>
+  </div>
+
+  <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
