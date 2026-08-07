@@ -68,7 +68,6 @@ class KhotsoAppTests(unittest.TestCase):
         except urllib.error.HTTPError as exc:
             return exc.code, exc.read().decode("utf-8"), exc.headers.get("Content-Type", "")
 
-
     def test_home_page_and_security_headers(self) -> None:
         head_request = urllib.request.Request(self.base + "/", method="HEAD")
         with urllib.request.urlopen(head_request, timeout=5) as head_response:
@@ -145,7 +144,6 @@ class KhotsoAppTests(unittest.TestCase):
         self.assertIn("v=0", decoded)
         self.assertIn('name="session"', decoded)
         self.assertTrue(decoded.endswith("--unit-test-boundary--\r\n"))
-
 
     def test_old_typed_chat_database_migrates(self) -> None:
         old_path = Path(_TEST_DIR.name) / "old-schema.db"
@@ -277,16 +275,19 @@ class KhotsoAppTests(unittest.TestCase):
     def test_secure_deployment_requires_password(self) -> None:
         original_secure = app.SESSION_COOKIE_SECURE
         original_password = app.APP_PASSWORD
+        original_secret = app.SESSION_SECRET
         try:
             app.SESSION_COOKIE_SECURE = True
             app.APP_PASSWORD = ""
             with self.assertRaisesRegex(RuntimeError, "APP_PASSWORD is required"):
                 app.validate_runtime_config()
             app.APP_PASSWORD = "private-password"
+            app.SESSION_SECRET = b"unit-test-session-secret-that-is-long"
             app.validate_runtime_config()
         finally:
             app.SESSION_COOKIE_SECURE = original_secure
             app.APP_PASSWORD = original_password
+            app.SESSION_SECRET = original_secret
 
     def test_voice_transcript_is_saved_once(self) -> None:
         payload = {
